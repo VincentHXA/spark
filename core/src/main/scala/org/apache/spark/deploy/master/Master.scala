@@ -613,6 +613,7 @@ private[deploy] class Master(
       spreadOutApps: Boolean): Array[Int] = {
     val coresPerExecutor = app.desc.coresPerExecutor
     val minCoresPerExecutor = coresPerExecutor.getOrElse(1)
+    // by hxa, 判断用户是否显式设置了executor的cpu数；如果没有设置，则每个worker只会启动一个executor, 且占用所有cores
     val oneExecutorPerWorker = coresPerExecutor.isEmpty
     val memoryPerExecutor = app.desc.memoryPerExecutorMB
     val numUsable = usableWorkers.length
