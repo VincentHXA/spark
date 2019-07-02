@@ -578,7 +578,7 @@ private[spark] class SparkSubmit extends Logging {
       OptionAssigner(args.queue, YARN, ALL_DEPLOY_MODES, confKey = "spark.yarn.queue"),
       OptionAssigner(args.pyFiles, YARN, ALL_DEPLOY_MODES, confKey = "spark.yarn.dist.pyFiles",
         mergeFn = Some(mergeFileLists(_, _))),
-      OptionAssigner(args.jars, YARN, ALL_DEPLOY_MODES, confKey = "spark.yarn.dist.jars",
+      OptionAssigner(args.jars, YARN, ALL_DEPLOY_MODES, confKey = "spark.yarn.dist.jars", // by hxa: 用户jars在这里指定
         mergeFn = Some(mergeFileLists(_, _))),
       OptionAssigner(args.files, YARN, ALL_DEPLOY_MODES, confKey = "spark.yarn.dist.files",
         mergeFn = Some(mergeFileLists(_, _))),
@@ -586,7 +586,7 @@ private[spark] class SparkSubmit extends Logging {
         mergeFn = Some(mergeFileLists(_, _))),
 
       // Other options
-      OptionAssigner(args.numExecutors, YARN | KUBERNETES, ALL_DEPLOY_MODES,
+      OptionAssigner(args.numExecutors, YARN | KUBERNETES, ALL_DEPLOY_MODES,     // by hxa: YARN 和 K8S 可以指定executors 数
         confKey = EXECUTOR_INSTANCES.key),
       OptionAssigner(args.executorCores, STANDALONE | YARN | KUBERNETES, ALL_DEPLOY_MODES,
         confKey = EXECUTOR_CORES.key),
@@ -615,6 +615,7 @@ private[spark] class SparkSubmit extends Logging {
 
     // In client mode, launch the application main class directly
     // In addition, add the main application jar and any added jars (if any) to the classpath
+    // by hxa: client 模式下，直接启动 app main class, 并将main app jar 和 added jars 加入 classpath
     if (deployMode == CLIENT) {
       childMainClass = args.mainClass
       if (localPrimaryResource != null && isUserJar(localPrimaryResource)) {
@@ -971,6 +972,7 @@ object SparkSubmit extends CommandLineUtils with Logging {
     "org.apache.spark.deploy.yarn.YarnClusterApplication"
   private[deploy] val REST_CLUSTER_SUBMIT_CLASS = classOf[RestSubmissionClientApp].getName()
   private[deploy] val STANDALONE_CLUSTER_SUBMIT_CLASS = classOf[ClientApp].getName()
+
   private[deploy] val KUBERNETES_CLUSTER_SUBMIT_CLASS =
     "org.apache.spark.deploy.k8s.submit.KubernetesClientApplication"
 
