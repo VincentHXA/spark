@@ -267,6 +267,7 @@ private[deploy] class Master(
         }
       }
 
+      // by hxa: AppClient向Master注册Application后，触发master的schedule函数进行launchExecutor
     case RegisterApplication(description, driver) =>
       // TODO Prevent repeated registrations from some driver
       if (state == RecoveryState.STANDBY) {
@@ -729,7 +730,9 @@ private[deploy] class Master(
     if (state != RecoveryState.ALIVE) {
       return
     }
-    // Drivers take strict precedence over executors
+    // Drivers take strict precedence over executor
+    // by hxa: driver拥有严格超过executor的执行优先权
+
     val shuffledAliveWorkers = Random.shuffle(workers.toSeq.filter(_.state == WorkerState.ALIVE))
     val numWorkersAlive = shuffledAliveWorkers.size
     var curPos = 0
@@ -742,6 +745,7 @@ private[deploy] class Master(
       while (numWorkersVisited < numWorkersAlive && !launched) {
         val worker = shuffledAliveWorkers(curPos)
         numWorkersVisited += 1
+        // by hxa: 判断worker资源满足启动driver的需求
         if (worker.memoryFree >= driver.desc.mem && worker.coresFree >= driver.desc.cores) {
           launchDriver(worker, driver)
           waitingDrivers -= driver
