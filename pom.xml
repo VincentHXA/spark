@@ -82,6 +82,7 @@
   </mailingLists>
 
   <modules>
+    <module>resource-managers/yarn</module>
     <module>common/sketch</module>
     <module>common/kvstore</module>
     <module>common/network-common</module>
@@ -2930,14 +2931,14 @@
         <orc.classifier></orc.classifier>
         <datanucleus-core.version>4.1.17</datanucleus-core.version>
       </properties>
-      <dependencies>
-        <!-- Both Hive and ORC need hive-storage-api, but it is excluded by orc-mapreduce -->
-        <dependency>
-          <groupId>org.apache.hive</groupId>
-          <artifactId>hive-storage-api</artifactId>
-          <version>2.6.0</version>
-        </dependency>
-      </dependencies>
+<!--      <dependencies>-->
+<!--        &lt;!&ndash; Both Hive and ORC need hive-storage-api, but it is excluded by orc-mapreduce &ndash;&gt;-->
+<!--        <dependency>-->
+<!--          <groupId>org.apache.hive</groupId>-->
+<!--          <artifactId>hive-storage-api</artifactId>-->
+<!--          <version>2.6.0</version>-->
+<!--        </dependency>-->
+<!--      </dependencies>-->
     </profile>
 
     <profile>

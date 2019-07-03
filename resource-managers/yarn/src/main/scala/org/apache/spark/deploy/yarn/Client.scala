@@ -281,7 +281,7 @@ private[spark] class Client(
       case Some(expr) =>
         val amRequest = Records.newRecord(classOf[ResourceRequest])
         amRequest.setResourceName(ResourceRequest.ANY)
-        amRequest.setPriority(Priority.newInstance(0))
+        amRequest.setPriority(Priority.newInstance(0))      // by hxa: 优先级固定为 0 了
         amRequest.setCapability(capability)
         amRequest.setNumContainers(1)
         amRequest.setNodeLabelExpression(expr)
